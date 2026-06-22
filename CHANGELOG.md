@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Netgear CM3000: logout action added to catalog.** The confirmed
+  CM3000 entry had no logout action, so HA never released the modem's
+  single admin session — a lingering session blocked re-login when HA
+  re-authenticated, surfacing as a random reconfigure failure that
+  cleared only after a manual browser sign-in. Adds `actions.logout`
+  (GET `/Logout.htm`, derived from the firmware's `gui_logout()`) so
+  Core releases the session after each poll and before a same-poll
+  auth retry. Catalog-only; reuses the existing logout primitive.
+  (Related to #127)
+
 ## [3.14.0-beta.11] - 2026-06-15
 
 ### Added
