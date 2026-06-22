@@ -13,6 +13,13 @@ auth:
   password_field: loginPassword
   cookie_name: "XSRF_TOKEN"
 
+actions:
+  logout:
+    type: http
+    method: GET
+    endpoint: "/Logout.htm"
+    requires_session: true
+
 hardware:
   docsis_version: "3.1"
 
@@ -39,6 +46,11 @@ notes: |
   XSRF_TOKEN cookie set on first GET, sent with all subsequent requests.
   Login page at /, POST to /goform/Login with loginName/loginPassword.
   md5.js loaded on login page but password sent plaintext.
+  Single admin session: the firmware holds one session slot, so a
+  lingering HA session blocks re-login until it is cleared (a manual
+  browser sign-in frees it). gui_logout() navigates to /Logout.htm;
+  actions.logout releases the session after each poll and before a
+  same-poll auth retry to avoid that lockout.
 
 # TODO: New HAR capture needed for provisioned speed
 # Same XHR pattern as CM2000/CM2050V — InitProvRateTableUpdateView()
